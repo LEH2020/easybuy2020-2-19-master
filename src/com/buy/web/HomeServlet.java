@@ -3,7 +3,6 @@ package com.buy.web;
 import com.buy.entity.EasybuyProductCategory;
 import com.buy.service.product.IProductCategoryService;
 import com.buy.service.product.ProductCategoryServiceImpl;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,9 +20,8 @@ public class HomeServlet extends HttpServlet {
         //存储数据
         request.setAttribute("categoryList",categoryList);
         //跳转到home.jsp
-        request.getRequestDispatcher("front/home.jsp").forward(request,response);
+        request.getRequestDispatcher("/front/home.jsp").forward(request,response);
     }
-
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=UTF-8");
