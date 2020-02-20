@@ -3,7 +3,7 @@ package com.buy.TestConn;
 import com.buy.dao.product.IProductCategory;
 import com.buy.dao.product.ProductCategoryImpl;
 import com.buy.entity.EasybuyProductCategory;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 

@@ -23,7 +23,6 @@ public class ProductCategoryImpl implements IProductCategory {
             if(!"".equals(parentId)||null!=parentId){
                sql.append(" and  parentId=0");
             }
-
             //获取连接
             Connection conn= DataSourceUtil.getConn();
             PreparedStatement pstmt=conn.prepareStatement(sql.toString());
