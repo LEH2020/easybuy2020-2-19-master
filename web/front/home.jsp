@@ -42,7 +42,8 @@
 <body>
 <%
     Object obj = request.getAttribute("categoryList");
-    if(obj == null){
+    //Object user=request.getAttribute("loginUser");user==null
+    if(obj == null  ){
         response.sendRedirect(request.getContextPath()+"/home?action=index");
     }
 %>
@@ -58,7 +59,8 @@
                 	<div class="s_city_t"></div>
                     <div class="s_city_c">
                     	<h2>请选择所在的收货地区</h2>
-                        <table border="0" class="c_tab" style="width:235px; margin-top:10px;" cellspacing="0" cellpadding="0">
+                        <table border="0" class="c_tab" style="width:235px; margin-top:10px;" cellspacing="0"
+                               cellpadding="0">
                           <tr>
                             <th>A</th>
                             <td class="c_h"><span>安徽</span><span>澳门</span></td>
@@ -126,7 +128,17 @@
         </span>
         <!--End 所在收货地区 End-->
         <span class="fr">
-        	<span class="fl">你好，请<a href="${ctx}/front/login.jsp">登录</a>&nbsp; <a href="${ctx}/front/regist.jsp" style="color:#ff4e00;">免费注册</a>&nbsp;|&nbsp;<a href="#">我的订单</a>&nbsp;|</span>
+        	<span class="fl">
+                <c:if test="${sessionScope.loginUser eq null}">
+                    你好，请<a href="${ctx}/front/login.jsp">登录
+                    </a>&nbsp; <a href="${ctx}/front/regist.jsp" style="color:#ff4e00;">免费注册
+                </c:if>
+                <c:if test="${sessionScope.loginUser != null}">
+                    用户<a href="" style="color: #0071c6">【${sessionScope.loginUser.loginname}】</a>登录&nbsp;
+                    <a href="login?action=loginOut">注销</a>
+                </c:if>
+                </a>&nbsp;|&nbsp;<a href="#">我的订单</a>&nbsp;|
+            </span>
         	<span class="ss">
             	<div class="ss_list">
                 	<a href="#">收藏夹</a>
@@ -168,10 +180,11 @@
             </span>
             <span class="fl">|&nbsp;关注我们：</span>
             <span class="s_sh"><a href="#" class="sh1">新浪</a><a href="#" class="sh2">微信</a></span>
-            <span class="fr">|&nbsp;<a href="#">手机版&nbsp;<img src="${pageContext.request.contextPath}/front/images/s_tel.png" align="absmiddle" /></a></span>
+            <span class="fr">|&nbsp;<a href="#">手机版&nbsp;<img src="${ctx}/front/images/s_tel.png" align="absmiddle"/></a></span>
         </span>
     </div>
 </div>
+
 <div class="top">
     <div class="logo"><a href="${pageContext.request.contextPath}/home"><img src="${pageContext.request.contextPath}/front/images/logo.png" /></a></div>
     <div class="search">

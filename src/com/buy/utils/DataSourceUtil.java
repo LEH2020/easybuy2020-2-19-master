@@ -2,7 +2,6 @@ package com.buy.utils;
 
 import com.alibaba.druid.pool.DruidDataSource;
 
-import javax.xml.stream.events.Comment;
 import java.sql.*;
 
 public class DataSourceUtil {
@@ -90,6 +89,37 @@ public class DataSourceUtil {
         return r;
     }
 
+
+    /**
+     * 释放资源的方法
+     * @param rs 结果集对象
+     * @param conn 数据库连接对象
+     * @param pstmt 执行SQL的对象
+     */
+    public static void closeAll(ResultSet rs, Connection conn,PreparedStatement pstmt){
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (pstmt != null) {
+            try {
+                pstmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public ResultSet executeQuery(String preparedSql, Object... param) throws ClassNotFoundException, SQLException {
         try {
             getConn(); // 得到数据库连接
@@ -122,6 +152,30 @@ public class DataSourceUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ResultSet executInsert(String sql, Object...params){
+        Long num =0L;
+        try {
+            getConn(); // 得到数据库连接
+            pstmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);// 得到PreparedStatement对象
+            if (params != null) {
+                for (int i = 0; i < params.length; i++) {
+                    pstmt.setObject(i + 1, params[i]); // 为预编译sql设置参数
+                }
+            }
+            pstmt.executeUpdate();
+            ResultSet rs = pstmt.getGeneratedKeys(); // 执行SQL语句
+            if (rs.next()){
+                num=rs.getLong(1);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();// 处理SQLException异常
+        }finally {
+            closeAll(null, conn, pstmt);
+        }
+        return resultSet;
     }
 }
 
