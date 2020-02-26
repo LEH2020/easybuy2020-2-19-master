@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 public class EasybuyUser implements Serializable {
     private static final long serialVersionUID = 999374981913207988L;
+
     /**
     * 主键
     */
@@ -47,6 +48,20 @@ public class EasybuyUser implements Serializable {
     */
     private Integer type;
 
+    public EasybuyUser() {
+    }
+
+    public EasybuyUser(Integer id, String loginname, String username, String password, Integer sex, String identitycode, String email, String mobile, Integer type) {
+        this.id = id;
+        this.loginname = loginname;
+        this.username = username;
+        this.password = password;
+        this.sex = sex;
+        this.identitycode = identitycode;
+        this.email = email;
+        this.mobile = mobile;
+        this.type = type;
+    }
 
     public Integer getId() {
         return id;
@@ -120,4 +135,18 @@ public class EasybuyUser implements Serializable {
         this.type = type;
     }
 
+    @Override
+    public String toString() {
+        return "EasybuyUser{" +
+                "id=" + id +
+                ", loginname='" + loginname + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", sex=" + sex +
+                ", identitycode='" + identitycode + '\'' +
+                ", email='" + email + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", type=" + type +
+                '}';
+    }
 }

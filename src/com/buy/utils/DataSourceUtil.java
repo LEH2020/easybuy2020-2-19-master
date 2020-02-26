@@ -3,15 +3,19 @@ package com.buy.utils;
 import com.alibaba.druid.pool.DruidDataSource;
 
 import javax.xml.stream.events.Comment;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DataSourceUtil {
     private  static final String driver="com.mysql.jdbc.Driver";
     private  static final String url="jdbc:mysql://localhost:3306/easybuy?useUnicode=true&characterEncoding=utf-8";
     private  static final String userName="root";
     private  static final String password="root";
+    private  static Connection conn = null;
+    private  static PreparedStatement pstmt = null;
+    private  static  ResultSet resultSet = null;
+
+
+
     //创建druid数据库
     private  static DruidDataSource druidDataSource=null;
     static{
@@ -43,7 +47,6 @@ public class DataSourceUtil {
      * @return 连接对象
      */
     public static Connection getConn(){
-        Connection conn=null;
         //加载mysql驱动（开启服务）
         try {
             Class.forName(driver);
@@ -59,17 +62,66 @@ public class DataSourceUtil {
         }
         return conn;
     }
-    //关闭连接的方法
-    public static void closeConnection(Connection conn)
-    {
-        if (conn!=null){
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
 
+    /**
+     * 通用增删改
+     */
+    public int executeUp(String sql, Object... param) {
+        /* Long id = 0L; */
+        int r = 0;
+        try {
+            conn = this.getConn();
+            pstmt = conn.prepareStatement(sql);
+            if (param != null) {
+                for (int i = 0; i < param.length; i++) {
+                    pstmt.setObject((i + 1), param[i]);
+                }
+            }
+            r = pstmt.executeUpdate();
+            /*
+             * rs = ps.getGeneratedKeys(); if (rs.next()) { id = rs.getLong(1);
+             * System.out.println("数据主键：" + id); }
+             */
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeConnection(conn, pstmt, resultSet);
+        }
+        return r;
+    }
+
+    public ResultSet executeQuery(String preparedSql, Object... param) throws ClassNotFoundException, SQLException {
+        try {
+            getConn(); // 得到数据库连接
+            pstmt = conn.prepareStatement(preparedSql);// 得到PreparedStatement对象
+            if (param != null) {
+                for (int i = 0; i < param.length; i++) {
+                    pstmt.setObject(i + 1, param[i]); // 为预编译sql设置参数
+                }
+            }
+            resultSet = pstmt.executeQuery(); // 执行SQL语句
+        } catch (SQLException e) {
+            e.printStackTrace();// 处理SQLException异常
+        }
+        return resultSet;
+    }
+
+    //关闭连接的方法
+    public static void closeConnection(Connection c, PreparedStatement ps, ResultSet rs)
+    {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+            if (c != null) {
+                c.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
 

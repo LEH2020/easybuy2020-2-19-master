@@ -8,10 +8,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+
 <script type="text/javascript">
     var contextPath = "${ctx}";
 </script>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,6 +40,12 @@
     <title>尤洪</title>
 </head>
 <body>
+<%
+    Object obj = request.getAttribute("categoryList");
+    if(obj == null){
+        response.sendRedirect(request.getContextPath()+"/home?action=index");
+    }
+%>
 <!--Begin Header Begin-->
 <div class="soubg">
     <div class="sou">
@@ -120,7 +126,7 @@
         </span>
         <!--End 所在收货地区 End-->
         <span class="fr">
-        	<span class="fl">你好，请<a href="Login.html">登录</a>&nbsp; <a href="Regist.html" style="color:#ff4e00;">免费注册</a>&nbsp;|&nbsp;<a href="#">我的订单</a>&nbsp;|</span>
+        	<span class="fl">你好，请<a href="${ctx}/front/login.jsp">登录</a>&nbsp; <a href="${ctx}/front/regist.jsp" style="color:#ff4e00;">免费注册</a>&nbsp;|&nbsp;<a href="#">我的订单</a>&nbsp;|</span>
         	<span class="ss">
             	<div class="ss_list">
                 	<a href="#">收藏夹</a>
